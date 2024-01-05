@@ -1,19 +1,8 @@
 import os
 import copy
 
-DATA_PATH_CLEAN = "/data/clean"
-DATA_PATH_SPAM = "/data/spam"
-
-class Dict_Default(dict):
-    """
-    Identical to dict, except returns default instead of None if no key found.
-    """
-    def __init__(self,default_val):
-        self.default_val = default_val
-        
-    def __missing__(self, key):
-        return self.default_val
-    
+DATA_PATH_CLEAN = "data/clean"
+DATA_PATH_SPAM = "data/spam"    
 
 def get_all_words(filename):
     """ Returns list of all words in the file at filename."""
@@ -34,7 +23,6 @@ def get_count_features(file_list,word_dict):
     outputs a list containing every feature dictionary.
     """
     output = []
-    
     for file in file_list:    
         words = get_all_words(file)
         nextFeature = word_dict.copy()
@@ -42,8 +30,8 @@ def get_count_features(file_list,word_dict):
         for word in words:
             if word in nextFeature:
                 nextFeature[word]+=1
-            output.append(nextFeature)
-        
+        output.append(nextFeature)
+    
     return output
 
 def get_words_features_clean(word_dict):
@@ -75,3 +63,4 @@ def get_dictionary():
         words = set(get_all_words(file))
         for word in words:
             output[word] = 0
+    return output
