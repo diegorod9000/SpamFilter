@@ -34,7 +34,7 @@ def create_training_features():
     dataset = [features_array,labels_array]
     
     
-    return dataset
+    return [dataset,dictionary]
 
 
 def train_model(dataset):
@@ -44,11 +44,48 @@ def train_model(dataset):
     print("training complete")
     return model
 
-def eval_model(model):
-    files = util.get_files_in_folder(DATA_PATH_TEST)
+def eval_model(model,dictionary):
     
+    files = util.get_files_in_folder(DATA_PATH_TEST)
+    true_vals = []
+    test_features = []
+    
+    totalSpam = 0
+    totalClean = 0
+    print("creating evaluation set")
+    for filename in files:    
+        words = util.get_all_words(filename)
+        nextFeature = dictionary.copy()
+        
+        if filename.split(".")[-2]=="spam":
+            true_vals.append(1)
+            totalSpam+=1
+        else:
+            true_vals.append(0)
+            totalClean+=1
+            
+        for word in words:
+            if word in nextFeature:
+                nextFeature[word]+=1
+        test_features.append(list(nextFeature.values()))
+        
+    print("predicting")
+    predictions = model.predict(test_features)
+    
+    correctSpam = 0
+    correctClean =0
+    for i in range(len(predictions)):
+        if predictions[i]==true_vals[i]:
+            if predictions[i] == 0:
+                correctClean+=1
+            else:
+                correctSpam+=1
+                
+    print("correctly identified %d out of %d clean emails" % (correctClean,totalClean))
+    print("correctly identified %d out of %d spam emails" % (correctSpam,totalSpam))
     
     
 if __name__ == "__main__":
-    dataset = create_training_features()
+    dataset,dictionary = create_training_features()
     model = train_model(dataset)
+    eval_model(model,dictionary)
