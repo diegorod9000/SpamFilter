@@ -1,9 +1,10 @@
 import numpy as np
 import tensorflow as tf
 import util
+import sklearn
+from sklearn.neural_network import MLPClassifier
 
-
-
+DATA_PATH_TEST = "data/testing"  
 
 def create_training_features():
     """
@@ -26,14 +27,28 @@ def create_training_features():
         train_features.append(list(feature.values()))
         train_labels.append(1)
         
-    features_array = np.array(train_features,dtype=np.float32)
-    labels_array = np.array(train_labels,dtype=np.float32)
+    features_array = np.array(train_features)
+    labels_array = np.array(train_labels)
     
     
-    dataset = tf.data.Dataset.from_tensor_slices((features_array,labels_array))
+    dataset = [features_array,labels_array]
     
-    print(len(train_features))
-    print(len(train_labels))
+    
+    return dataset
 
+
+def train_model(dataset):
+    model = MLPClassifier()
+    print("running training")
+    model.fit(dataset[0],dataset[1])
+    print("training complete")
+    return model
+
+def eval_model(model):
+    files = util.get_files_in_folder(DATA_PATH_TEST)
+    
+    
+    
 if __name__ == "__main__":
-    create_training_features()
+    dataset = create_training_features()
+    model = train_model(dataset)
