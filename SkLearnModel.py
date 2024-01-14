@@ -2,9 +2,12 @@ import numpy as np
 import tensorflow as tf
 import util
 import sklearn
+import torch
 from sklearn.neural_network import MLPClassifier
 
 DATA_PATH_TEST = "data/testing"  
+WEIGHT_CLEAN = 1
+WEIGHT_SPAM = 1
 
 def create_training_features():
     """
@@ -20,20 +23,19 @@ def create_training_features():
     train_labels = []
     print("creating clean data features")
     for feature in train_clean:
-        train_features.append(list(feature.values()))
-        train_labels.append(0)
+        for i in range(WEIGHT_CLEAN):
+            train_features.append(list(feature.values()))
+            train_labels.append(0)
     print("creating spam data features")
     for feature in train_spam:
-        train_features.append(list(feature.values()))
-        train_labels.append(1)
+        for i in range(WEIGHT_SPAM):
+            train_features.append(list(feature.values()))
+            train_labels.append(1)
         
     features_array = np.array(train_features)
     labels_array = np.array(train_labels)
     
-    
     dataset = [features_array,labels_array]
-    
-    
     return [dataset,dictionary]
 
 
