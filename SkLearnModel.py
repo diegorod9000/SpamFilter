@@ -3,7 +3,7 @@ import util
 import sklearn
 from sklearn.neural_network import MLPClassifier
 
-DATA_PATH_TEST = "data/testing"  
+DATA_PATH_TEST = "data/testing_large"  
 WEIGHT_CLEAN = 1
 WEIGHT_SPAM = 1
 

@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-DATA_PATH_TEST = "data/testing"  
+DATA_PATH_TEST = "data/testing_large"
 WEIGHT_CLEAN = 2
 WEIGHT_SPAM = 1
 LEARNING_RATE = 0.03
