@@ -1,5 +1,4 @@
 import numpy as np
-import tensorflow as tf
 import util
 import torch
 import torch.nn as nn
@@ -51,6 +50,9 @@ def create_training_features():
         
     features = torch.tensor(train_features, dtype=torch.float32)
     labels = torch.tensor(train_labels)
+    if(torch.cuda.is_available()):
+        features = features.to(device="cuda")
+        labels = labels.to(device="cuda")
     
     
     return features, labels, dictionary
@@ -98,6 +100,9 @@ def eval_network(net,dictionary):
                 nextFeature[word]+=1
         test_features.append(list(nextFeature.values()))
     test_features = torch.Tensor(test_features)
+    
+    if(torch.cuda.is_available()):
+        test_features = test_features.to(device="cuda")
     
     print("predicting")
     predictions = net(test_features)
