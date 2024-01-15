@@ -8,17 +8,16 @@ import torch.nn.functional as F
 DATA_PATH_TEST = "data/testing"  
 WEIGHT_CLEAN = 2
 WEIGHT_SPAM = 1
-LEARNING_RATE = 0.01
-REGULARIZE = 1e-4
-NUM_EPOCHS = 10
+LEARNING_RATE = 0.03
+REGULARIZE = 0.1
+NUM_EPOCHS = 30
 
 class Net(nn.Module):
     def __init__(self, length):
         super(Net, self).__init__()
-        # an affine operation: y = Wx + b
-        length1 = length>>1
-        length2 = length>>2
-        self.fc1 = nn.Linear(length, length1)  # 5*5 from image dimension
+        length1 = length>>3
+        length2 = length>>5
+        self.fc1 = nn.Linear(length, length1) 
         self.fc2 = nn.Linear(length1, length2)
         self.fc3 = nn.Linear(length2, 2)
 
@@ -63,7 +62,7 @@ def train_network(features,labels):
     print("running training")
     
     optimizer = torch.optim.SGD(net.parameters(), lr=LEARNING_RATE, weight_decay=REGULARIZE)
-    criterion = nn.NLLLoss()
+    criterion = nn.CrossEntropyLoss()
     for i in range(NUM_EPOCHS):
         optimizer.zero_grad()
         output = net(features)
@@ -106,7 +105,7 @@ def eval_network(net,dictionary):
     correctSpam = 0
     correctClean = 0
     for i in range(len(predictions)):
-        prediction = 0 if predictions[i][0]>predictions[i][1] else 1
+        prediction = 1 if predictions[i][0]<predictions[i][1] else 0
         if prediction==true_vals[i]:
             if prediction == 0:
                 correctClean+=1
@@ -118,7 +117,6 @@ def eval_network(net,dictionary):
     
     
 if __name__ == "__main__":
-    
     features, labels, dictionary = create_training_features()
     model = train_network(features,labels)
     eval_network(model,dictionary)
