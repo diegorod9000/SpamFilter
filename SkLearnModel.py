@@ -1,8 +1,6 @@
 import numpy as np
-import tensorflow as tf
 import util
 import sklearn
-import torch
 from sklearn.neural_network import MLPClassifier
 
 DATA_PATH_TEST = "data/testing"  

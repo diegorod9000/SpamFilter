@@ -1,8 +1,8 @@
 import os
 import copy
 
-DATA_PATH_CLEAN = "data/clean"
-DATA_PATH_SPAM = "data/spam"    
+DATA_PATH_CLEAN = "data/clean_large"
+DATA_PATH_SPAM = "data/spam_large"
 
 def get_all_words(filename):
     """ Returns list of all words in the file at filename."""
